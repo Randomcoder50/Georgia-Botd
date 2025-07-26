@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-PARTNERSHIP_CHANNEL_ID = 1369100651946184847  # <<-- SET THIS POLICE TO THE PARTNERSHIP CHANNEL ID
+PARTNERSHIP_CHANNEL_ID = 1394756011881140314  # <<-- SET THIS POLICE TO THE PARTNERSHIP CHANNEL ID
 
 
 class AdDropdown(discord.ui.View):
@@ -67,10 +67,12 @@ class Partnership(commands.Cog):
         self.bot = bot
 
     @app_commands.command(name="partnership_add", description="Submit a partnership ad.")
-    @commands.has_permissions(Administrator=True)
     @app_commands.describe(rep="Mention the representative you're partnering with")
     async def partnership_add(self, interaction: discord.Interaction, rep: discord.Member):
-        await interaction.response.send_modal(PartnershipModal(rep))
+        if interaction.user.guild_permissions.administrator:
+            await interaction.response.send_modal(PartnershipModal(rep))
+        else:
+            await interaction.response.send_message("❌ You do not have permission to use this command.", ephemeral=True)
 
 
 async def setup(bot):
