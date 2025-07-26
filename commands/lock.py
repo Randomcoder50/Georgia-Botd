@@ -37,13 +37,10 @@ class LockCommand(commands.Cog):
     @app_commands.command(name="lock", description="Lock the current channel")
     @commands.has_permissions(manage_messages=True)
     async def lock_slash(self, interaction: discord.Interaction):
-        await self.lock_channel(interaction, interaction.channel, interaction.user)
-
-    @commands.command(name="lock")
-    @commands.has_permissions(manage_messages=True)
-    @commands.has_permissions(manage_channels=True)
-    async def lock_prefix(self, ctx: commands.Context):
-        await self.lock_channel(ctx, ctx.channel, ctx.author)
+        if interaction.user.guild_permissions.manage_messages:
+            await self.lock_channel(interaction, interaction.channel, interaction.user)
+        else:
+            await interaction.response.send_message("❌ You do not have permission to use this command.", ephemeral=True)
 
 async def setup(bot):
     await bot.add_cog(LockCommand(bot))
