@@ -33,7 +33,7 @@ async def on_ready():
     
 
     member_count = guild._member_count
-    bot.change_presence(activity=discord.Activity(
+    await bot.change_presence(activity=discord.Activity(
         type=discord.ActivityType.watching,
         name=f"{member_count} members"
     ))  
