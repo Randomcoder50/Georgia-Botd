@@ -39,12 +39,12 @@ class Unlock(commands.Cog):
     @app_commands.command(name="unlock", description="Unlock the current channel")
     @commands.has_permissions(manage_messages=True)
     async def unlock_slash(self, interaction: discord.Interaction):
-        await self.unlock_channel(interaction, interaction.channel, interaction.user)
+        if interaction.user.guild_permissions.manage_messages:
+            await self.unlock_channel(interaction, interaction.channel, interaction.user)
+        else:
+            await interaction.response.send_message("❌ You do not have permission to use this command.", ephemeral=True)
+        
 
-    @commands.command(name="unlock")
-    @commands.has_permissions(manage_messages=True)
-    async def unlock_prefix(self, ctx: commands.Context):
-        await self.unlock_channel(ctx, ctx.channel, ctx.author)
 
 async def setup(bot):
     await bot.add_cog(Unlock(bot))
